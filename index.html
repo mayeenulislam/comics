@@ -21,9 +21,45 @@
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <style type="text/css">
+        :root {
+            --bg-color: #f6f6f6;
+            --text-color: #333;
+            --card-bg: #fff;
+            --navbar-bg: #fff;
+            --border-color: #ddd;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --bio-bg: #fff;
+            --bio-text: #555;
+            --bio-header-text: #1a1a2e;
+            --social-bg: #f0f0f0;
+            --social-color: #333;
+            --primary-color: #4565e9;
+            --secondary-color: #1b2e7d;
+            --site-heading-color: #4565e9;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1a1a2e;
+            --text-color: #f0f0f0;
+            --card-bg: #16213e;
+            --navbar-bg: #0f2d51;
+            --border-color: #333;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --bio-bg: #16213e;
+            --bio-text: #ccc;
+            --bio-header-text: #f0f0f0;
+            --social-bg: #333;
+            --social-color: #f0f0f0;
+            --primary-color: #4565e9;
+            --secondary-color: #1b2e7d;
+            --site-heading-color: #fff;
+        }
+
         body {
-            background-color: #f6f6f6;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             font-family: 'Anek Bangla', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .bookshelf .thumb {
@@ -31,7 +67,7 @@
             cursor: pointer;
             margin: 0px 0.5%;
             width: 15% !important;
-            box-shadow: 0px 1px 3px rgba(0, 0, 0, .3);
+            box-shadow: 0px 1px 3px var(--shadow-color);
             max-width: 100px;
         }
 
@@ -80,12 +116,12 @@
             width: 60px;
             height: 60px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #4565e9 0%, #1b2e7d 100%);
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             color: white;
             border: none;
             font-size: 1.5rem;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 5px 15px var(--shadow-color);
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
@@ -102,10 +138,10 @@
             bottom: 70px;
             right: 0;
             width: 300px;
-            background: white;
+            background: var(--bio-bg);
             border-radius: 16px;
             padding: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 30px var(--shadow-color);
             transform: scale(0);
             transform-origin: bottom right;
             opacity: 0;
@@ -127,7 +163,7 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #4565e9 0%, #1b2e7d 100%);
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -140,11 +176,11 @@
         .author-name {
             font-size: 1.2rem;
             font-weight: 700;
-            color: #1a1a2e;
+            color: var(--bio-header-text);
         }
 
         .author-bio-text {
-            color: #555;
+            color: var(--bio-text);
             font-size: 0.9rem;
             line-height: 1.5;
         }
@@ -159,11 +195,11 @@
             width: 35px;
             height: 35px;
             border-radius: 50%;
-            background: #f0f0f0;
+            background: var(--social-bg);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #333;
+            color: var(--social-color);
             transition: all 0.3s ease;
         }
 
@@ -178,13 +214,14 @@
         /* Custom CSS to define fixed book size and hover effect, as these aren't standard Bootstrap utilities */
         .book-thumb {
             cursor: pointer;
-            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 5px 5px 15px var(--shadow-color);
             transition: transform 0.3s ease;
             /* Using a fixed size for the book cover thumbnail */
             width: 400px; /* height: 200px;  */
             margin: 15px; /* Spacing between books */
             overflow: hidden;
             border-radius: 5px;
+            background-color: var(--card-bg);
         }
 
         .book-thumb h3 {
@@ -216,12 +253,78 @@
             bottom: 20px;
             right: 0;
             color: white;
-            background-color: #4565e9;
+            background-color: var(--primary-color);
         }
 
         .top-bio-toggle {
             border: none;
+        }
 
+        /* Dark mode toggle styles */
+        .theme-toggle {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background-color: #ccc;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-left: 15px;
+        }
+
+        .theme-toggle-slider {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        .theme-toggle.active {
+            background-color: var(--primary-color);
+        }
+
+        .theme-toggle.active .theme-toggle-slider {
+            transform: translateX(30px);
+        }
+
+        .theme-toggle-icon {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+        }
+
+        .theme-toggle-icon.sun {
+            left: 6px;
+            color: #f39c12;
+        }
+
+        .theme-toggle-icon.moon {
+            right: 6px;
+            color: #f1c40f;
+        }
+
+        /* Navbar styles for dark mode */
+        .navbar {
+            background-color: var(--navbar-bg) !important;
+            transition: background-color 0.3s ease;
+        }
+
+        /* .navbar-brand span {
+            color: var(--primary-color) !important;
+        } */
+
+        .text-muted {
+            color: var(--bio-text) !important;
+        }
+
+        /* Flipbook dark mode adjustments */
+        .flipbook-container {
+            background-color: var(--card-bg) !important;
         }
     </style>
 </head>
@@ -229,9 +332,9 @@
 <body>
 
     <!-- Just an image -->
-    <nav class="navbar navbar-light bg-white fixed-top">
+    <nav class="navbar navbar-light fixed-top">
         <h1 style="margin-bottom: 0; font-weight: 700;">
-            <a class="navbar-brand" href="javascript;" style="line-height: 25px;">
+            <a class="navbar-brand" href="javascript:;" style="line-height: 25px; color: var(--site-heading-color);">
                 <img
                     src="images/mayeenul-islam-comic.png"
                     alt="A colorful comic motif logo of Mayeenul Islam"
@@ -239,13 +342,20 @@
                     height="50"
                     style="float: left; margin-right: 20px"
                 >
-                <span style="color: #4565e9; font-weight: 800;">টুকরো ওয়েব কমিক</span><br /><small style="font-weight: normal;" class="text-muted">মঈনুল ইসলাম</small>
+                <span style="font-weight: 800;">টুকরো ওয়েব কমিক</span><br /><small style="font-weight: normal;" class="text-muted">মঈনুল ইসলাম</small>
             </a>
         </h1>
-        <button class="top-bio-toggle border-0 bg-transparent px-3 py-1 d-none d-sm-block" id="authorBioToggle2" title="Toggle Author Biography">
-            <i class="fas fa-user mr-2" style="color: #4565e9" aria-hidden="true"></i>
-            আমি কেউ না
-        </button>
+        <div class="d-flex align-items-center">
+            <div class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
+                <div class="theme-toggle-slider"></div>
+                <i class="fas fa-sun theme-toggle-icon sun"></i>
+                <i class="fas fa-moon theme-toggle-icon moon"></i>
+            </div>
+            <button class="top-bio-toggle border-0 bg-transparent px-3 py-1 d-none d-sm-block" id="authorBioToggle2" title="Toggle Author Biography" style="color: var(--bio-header-text)">
+                <i class="fas fa-user mr-2" style="color: var(--primary-color)" aria-hidden="true"></i>
+                আমি কেউ না
+            </button>
+        </div>
     </nav>
 
     <!-- Author Bio -->
@@ -433,6 +543,35 @@
             const bioContent = document.getElementById('authorBioContent');
             bioContent.classList.toggle('active');
         }
+
+        // Dark mode functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const htmlElement = document.documentElement;
+
+        // Check for saved theme preference or default to light mode
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        htmlElement.setAttribute('data-theme', currentTheme);
+
+        // Update toggle button state based on current theme
+        if (currentTheme === 'dark') {
+            themeToggle.classList.add('active');
+        }
+
+        // Add event listener to toggle theme
+        themeToggle.addEventListener('click', function() {
+            // Toggle theme
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            // Update HTML attribute
+            htmlElement.setAttribute('data-theme', newTheme);
+            
+            // Update toggle button state
+            themeToggle.classList.toggle('active');
+            
+            // Save theme preference to localStorage
+            localStorage.setItem('theme', newTheme);
+        });
     </script>
 
     <!-- Bootstrap Js -->
