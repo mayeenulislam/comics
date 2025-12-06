@@ -486,11 +486,13 @@
         let flipbookInstances = {};
         let currentOpenSlug = null;
 
+        // Get the base path for GitHub Pages
+        const basePath = window.location.pathname.replace(/\/$/, '').split('/').slice(0, -1).join('/') || '';
+
         // Function to get current slug from URL
         function getSlugFromUrl() {
-            const path = window.location.pathname;
-            const segments = path.split('/').filter(s => s);
-            return segments.length > 0 ? segments[segments.length - 1] : null;
+            const hash = window.location.hash.substring(1); // Remove the # symbol
+            return hash || null;
         }
 
         // Function to open a book by slug
@@ -504,14 +506,13 @@
 
         // Function to navigate to a book
         function navigateToBook(slug) {
-            const newUrl = `/${slug}`;
-            history.pushState({ slug: slug }, '', newUrl);
+            window.location.hash = slug;
             currentOpenSlug = slug;
         }
 
         // Function to clear URL when book is closed
         function clearBookUrl() {
-            history.pushState({}, '', '/');
+            history.pushState('', document.title, window.location.pathname + window.location.search);
             currentOpenSlug = null;
         }
 
@@ -639,15 +640,18 @@
         });
 
         // Handle browser back/forward buttons
-        window.addEventListener('popstate', function(event) {
-            if (event.state && event.state.slug) {
-                openBookBySlug(event.state.slug);
-            } else {
-                // User navigated back to home - close any open flipbooks
-                if (currentOpenSlug) {
-                    $('[data-name="btnClose"]').trigger('click');
-                    currentOpenSlug = null;
+        window.addEventListener('hashchange', function() {
+            const slug = getSlugFromUrl();
+            if (slug && books.find(b => b.slug === slug)) {
+                openBookBySlug(slug);
+            } else if (!slug && currentOpenSlug) {
+                // Hash was cleared, close the book
+                const bodyHasClass = document.body.classList.contains('flipbook-overflow-hidden');
+                if (bodyHasClass) {
+                    // Trigger close by simulating ESC key or clicking overlay
+                    $('.flipbook-overlay').trigger('click');
                 }
+                currentOpenSlug = null;
             }
         });
 
@@ -656,7 +660,9 @@
             e.preventDefault();
             clearBookUrl();
             // Close any open flipbooks
-            $('[data-name="btnClose"]').trigger('click');
+            if (currentOpenSlug) {
+                $('.flipbook-overlay').trigger('click');
+            }
         });
     </script>
 
